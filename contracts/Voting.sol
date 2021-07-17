@@ -6,7 +6,7 @@ import "hardhat/console.sol";
 
 contract Voting {
 
-  address owner;
+  address public owner;
   
   mapping(address => uint) votes;
 
