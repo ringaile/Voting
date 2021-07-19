@@ -19,8 +19,8 @@ contract Voting {
 
   address public owner;
   
-  mapping(address => Voter) voters;
-  mapping (uint => Proposal) proposals;
+  mapping(address => Voter) public voters;
+  mapping (uint => Proposal) public proposals;
   uint noOfProposals = 0;
 
   constructor() {
@@ -28,21 +28,24 @@ contract Voting {
     owner = msg.sender;
   }
 
-  function addAProposal(string memory _title) public {
+  function addAProposal(string memory _title) public returns (uint) {
     Proposal memory proposal = Proposal(_title, 0);
     noOfProposals++;
     proposals[noOfProposals] = proposal;
+    return noOfProposals;
   }
 
-  function allowToVote(address _voter) public view {
+  function allowToVote(address _voter) public {
     require(msg.sender == owner, "Only the contract owner can allow to vote.");
-    voters[_voter].allowedToVote == true;
+    voters[_voter].allowedToVote = true;
+    voters[_voter].voted = false;
   }
 
   function vote(uint _vote) public {
-    require(voters[msg.sender].allowedToVote == true, "You are not allowed to vote.");
+    require(true == voters[msg.sender].allowedToVote, "You are not allowed to vote.");
     require(voters[msg.sender].voted == false, "You already voted.");
     voters[msg.sender].votedProposal = _vote;
+    voters[msg.sender].voted = true;
     proposals[_vote].votes++;
   }
 
