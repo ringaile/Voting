@@ -55,7 +55,7 @@ describe("Voting", function () {
 
       expect(await voting.voters(addr1.address).allowedToVote == true);
 
-      const addProposalTx = await voting.addAProposal("My new proposal.");
+      const addProposalTx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
 
       // wait until the transaction is mined
       await addProposalTx.wait();
@@ -71,7 +71,7 @@ describe("Voting", function () {
     it("Should not allow a voter to vote when he is not allowed to vote and not voted yet", async function () {
       expect(await voting.voters(addr2.address).allowedToVote == false);
 
-      const addProposalTx = await voting.addAProposal("My new proposal.");
+      const addProposalTx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
 
       // wait until the transaction is mined
       await addProposalTx.wait();
@@ -88,7 +88,7 @@ describe("Voting", function () {
 
       expect(await voting.voters(addr1.address).allowedToVote == true);
 
-      const addProposalTx = await voting.addAProposal("My new proposal.");
+      const addProposalTx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
 
       // wait until the transaction is mined
       await addProposalTx.wait();
@@ -105,13 +105,12 @@ describe("Voting", function () {
   describe("Proposals", function () {
     it("Should let anyone to add a proposal", async function () {
 
-      const allowToVoteTx = await voting.addAProposal("My new proposal.");
+      const allowToVoteTx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
 
       // wait until the transaction is mined
       await allowToVoteTx.wait();
 
-      // TODO: return an integer
-      expect(await voting.proposals(0).title == "My new proposal.");
+      expect(await voting.proposals(0).title == "My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
     });
 
     it("Should return a winning proposal", async function () {
@@ -124,10 +123,10 @@ describe("Voting", function () {
       const allowToVote3Tx = await voting.allowToVote(addr3.address);
       await allowToVote3Tx.wait();
 
-      const addProposal1Tx = await voting.addAProposal("My new proposal.");
+      const addProposal1Tx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
       // wait until the transaction is mined
       await addProposal1Tx.wait();
-      const addProposal2Tx = await voting.addAProposal("My second proposal.");
+      const addProposal2Tx = await voting.addAProposal("My second proposal.", "810210a40202c3a47fd277bcf8e763fb739ac888ce3944fe6f52102909b416d5");
       await addProposal1Tx.wait();
 
       const vote1Tx = await voting.connect(addr1).vote(1);
