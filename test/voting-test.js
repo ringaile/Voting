@@ -36,6 +36,14 @@ describe("Voting", function () {
       expect(await voting.voters(addr1.address).allowedToVote == true);
     });
 
+    it("Should emit an event when a voter is allowed to vote", async function () {
+      expect(await voting.voters(addr1.address).allowedToVote == false);
+
+      const allowToVoteTx = await voting.allowToVote(addr1.address);
+
+      await expect(allowToVoteTx).to.emit(voting, 'VoterIsAllowedToVote').withArgs(addr1.address, true);
+    });
+
     it("Should not let any account to set a right to vote", async function () {
       expect(await voting.voters(addr1.address).allowedToVote == false);
 
@@ -65,7 +73,29 @@ describe("Voting", function () {
       // wait until the transaction is mined
       await voteTx.wait();
 
-      expect(await voting.voters(addr1.address).voted == false);
+      expect(await voting.voters(addr1.address).voted == true);
+    });
+
+    it("Should emit a VoterHasVoted event when a voter voted", async function () {
+      expect(await voting.voters(addr1.address).allowedToVote == false);
+
+      const allowToVoteTx = await voting.allowToVote(addr1.address);
+
+      await allowToVoteTx.wait();
+
+      expect(await voting.voters(addr1.address).allowedToVote == true);
+
+      const addProposalTx = await voting.addAProposal("My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
+
+      // wait until the transaction is mined
+      await addProposalTx.wait();
+
+      const voteTx = await voting.connect(addr1).vote(0);
+
+      // wait until the transaction is mined
+      await voteTx.wait();
+
+      await expect(voteTx).to.emit(voting, 'VoterHasVoted').withArgs(addr1.address, true);
     });
 
     it("Should not allow a voter to vote when he is not allowed to vote and not voted yet", async function () {
@@ -109,6 +139,8 @@ describe("Voting", function () {
 
       // wait until the transaction is mined
       await allowToVoteTx.wait();
+
+      await expect(allowToVoteTx).to.emit(voting, 'ProposalAdded').withArgs(1, "My new proposal.");
 
       expect(await voting.proposals(0).title == "My new proposal.", "c6e940b196b1b8168df6ca9c10815eca24c3ef5c82d485e0fd3c9263b7470d2c");
     });
