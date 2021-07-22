@@ -1,4 +1,4 @@
-name: Hardhat Tests
+name: Hardhat Solhint
 
 on:
     push:
@@ -9,9 +9,9 @@ on:
         branches:
             - '*'
 jobs:
-    run_hardhart_tests:
+    run_hardhart_solhint:
         runs-on: ubuntu-latest
-        name: Run the Hardhat tests
+        name: Run the Hardhat solhint
         steps:
             - uses: actions/checkout@v1
             - name: Use Node.js 15.x
@@ -19,4 +19,4 @@ jobs:
               with:
                   node-version: 15.x
             - run: npm install
-            - run: npx hardhat test
+            - run: npx hardhat check
