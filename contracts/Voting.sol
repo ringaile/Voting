@@ -14,7 +14,7 @@ contract Voting {
 
     struct Proposal {
         string title;
-        string documentHash;
+        string ipfsHash;
         uint votes;
     }
 
@@ -33,8 +33,8 @@ contract Voting {
         owner = msg.sender;
     }
 
-    function addAProposal(string memory _title, string memory _hash) public {
-        Proposal memory proposal = Proposal(_title, _hash, 0);
+    function addAProposal(string memory _title, string memory _ipfsHash) public {
+        Proposal memory proposal = Proposal(_title, _ipfsHash, 0);
         noOfProposals++;
         proposals[noOfProposals] = proposal;
         emit ProposalAdded(noOfProposals, _title);
@@ -73,6 +73,6 @@ contract Voting {
     }
 
     function getProposalHash(uint _id) public view returns (string memory) {
-        return proposals[_id].documentHash;
+        return proposals[_id].ipfsHash;
     }
 }
